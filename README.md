@@ -1,5 +1,5 @@
 # node-steam-inventory
-A module for interacting with steam API for getting users inventory
+A module for interacting with steam for getting users inventory
 
 ## Two endpoints
 Steam has two endpoints:
