@@ -3,8 +3,8 @@ A module for interacting with steam for getting users inventory
 
 ## Two endpoints
 Steam has two endpoints:
-- https://steamcommunity.com/profiles/STEAM_ID/inventory/json/APP_ID/CONTEXT_Id/
-- https://steamcommunity.com/inventory/STEAM_ID/APP_ID/CONTEXT_Id/
+- https://steamcommunity.com/profiles/STEAM_ID/inventory/json/APP_ID/CONTEXT_Id/ (OLD)
+- https://steamcommunity.com/inventory/STEAM_ID/APP_ID/CONTEXT_Id/ (NEW)
 
 You can see their differences in [stackoverflow](https://stackoverflow.com/questions/17393099/getting-someones-steam-inventory).
 In this module you can use both of them.
