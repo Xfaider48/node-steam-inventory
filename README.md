@@ -64,7 +64,7 @@ steamInventory.loadFromOldEndPointAndFormat(params).then(formattedArray => {
 ```
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `params` | Object | `undefined` | Parameters for method [loadFromOldEndPoint](#loadFromOldEndPoint) |
+| `params` | Object | `undefined` | Parameters for method [loadFromOldEndPoint](#loadfromoldendpoint) |
 
 
 #### loadFromNewEndPoint
@@ -118,7 +118,7 @@ steamInventory.loadFromNewEndPointAndFormat(params).then(formattedArray => {
 ```
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `params` | Object | `undefined` | Parameters for method [loadFromNewEndPoint](#loadFromNewEndPoint) |
+| `params` | Object | `undefined` | Parameters for method [loadFromNewEndPoint](#loadfromnewendpoint) |
 
 
 #### loadFromNewEndPointNextPage
@@ -131,7 +131,7 @@ steamInventory.loadFromNewEndPointNextPage(params, previousResponse).then(format
 ```
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `params` | Object | `undefined` | Parameters for method [loadFromNewEndPoint](#loadFromNewEndPoint) |
+| `params` | Object | `undefined` | Parameters for method [loadFromNewEndPoint](#loadfromnewendpoint) |
 | `previousResponse` | Object | `undefined` | Steam response from new endpoint |
 
 
@@ -145,8 +145,8 @@ steamInventory.loadAllDataFromNewEndPointAndFormat(params, getGotOptionsPromise)
 ```
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `params` | Object | `undefined` | Parameters for method [loadAllDataFromNewEndPoint](#loadAllDataFromNewEndPoint) |
-| `getGotOptionsPromise` | Function | `null` | See this parameter in [loadAllDataFromNewEndPoint](#loadAllDataFromNewEndPoint)|
+| `params` | Object | `undefined` | Parameters for method [loadAllDataFromNewEndPoint](#loadalldatafromnewendpoint) |
+| `getGotOptionsPromise` | Function | `null` | See this parameter in [loadAllDataFromNewEndPoint](#loadalldatafromnewendpoint)|
 
 
 #### load
@@ -159,9 +159,9 @@ steamInventory.load(params, useNewEndPoint, getGotOptionsPromise).then(responses
 ```
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `params` | Object | `undefined` | Parameters for method [loadAllDataFromNewEndPoint](#loadAllDataFromNewEndPoint) or [loadFromOldEndPoint](#loadFromOldEndPoint)|
+| `params` | Object | `undefined` | Parameters for method [loadAllDataFromNewEndPoint](#loadalldatafromnewendpoint) or [loadFromOldEndPoint](#loadfromoldendpoint)|
 | `useNewEndPoint` | Boolean | `true` | Flag for using new endpoint (or old) |
-| `getGotOptionsPromise` | Function | `null` | See this parameter in [loadAllDataFromNewEndPoint](#loadAllDataFromNewEndPoint)|
+| `getGotOptionsPromise` | Function | `null` | See this parameter in [loadAllDataFromNewEndPoint](#loadalldatafromnewendpoint)|
 
 #### loadAndFormat
 **Main method**. Load steam inventory from new or old endpoints and format it
@@ -173,9 +173,9 @@ steamInventory.loadAndFormat(params, useNewEndPoint, getGotOptionsPromise).then(
 ```
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `params` | Object | `undefined` | Parameters for method [loadAllDataFromNewEndPointAndFormat](#loadAllDataFromNewEndPointAndFormat) or [loadFromOldEndPointAndFormat](#loadFromOldEndPointAndFormat)|
+| `params` | Object | `undefined` | Parameters for method [loadAllDataFromNewEndPointAndFormat](#loadalldatafromnewendpointandformat) or [loadFromOldEndPointAndFormat](#loadfromoldendpointandformat)|
 | `useNewEndPoint` | Boolean | `true` | Flag for using new endpoint (or old) |
-| `getGotOptionsPromise` | Function | `null` | See this parameter in [loadAllDataFromNewEndPointAndFormat](#loadAllDataFromNewEndPointAndFormat)|
+| `getGotOptionsPromise` | Function | `null` | See this parameter in [loadAllDataFromNewEndPointAndFormat](#loadalldatafromnewendpointandformat)|
 
 ### Static methods
 
@@ -280,7 +280,7 @@ formatItem(itemData).then(formatted => {
 
 
 #### formatData
-Format response data (result is array of objects formatted by [formatItem](#formatItem))
+Format response data (result is array of objects formatted by [formatItem](#formatitem))
 ```javascript
 formatData(items, descriptions).then(formattedArray => {
     console.log(formattedArray);
@@ -294,7 +294,7 @@ formatData(items, descriptions).then(formattedArray => {
 
 
 #### formatDataFromOldEndPoint
-Format response data from old endpoint(see result [formatData](#formatData))
+Format response data from old endpoint(see result [formatData](#formatdata))
 ```javascript
 formatDataFromOldEndPoint(data).then(formattedArray => {
     console.log(formattedArray);
@@ -306,7 +306,7 @@ formatDataFromOldEndPoint(data).then(formattedArray => {
 | `data` | Object | `undefined` | Data in response from old steam endpoint |
 
 #### formatDataFromNewEndPoint
-Format response data from new endpoint(see result [formatData](#formatData))
+Format response data from new endpoint(see result [formatData](#formatdata))
 ```javascript
 formatDataFromNewEndPoint(data).then(formattedArray => {
     console.log(formattedArray);
