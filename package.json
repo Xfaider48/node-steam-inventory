@@ -1,6 +1,6 @@
 {
   "name": "@xfaider/node-steam-inventory",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A module for interacting with steam for getting users inventory",
   "main": "lib/index.js",
   "repository": {
@@ -10,6 +10,7 @@
   "keywords": [
     "node",
     "steam",
+    "user",
     "inventory",
     "api"
   ],

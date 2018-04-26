@@ -182,7 +182,7 @@ steamInventory.loadAndFormat(params, useNewEndPoint, getGotOptionsPromise).then(
 #### requestJSON
 JSON request
 ```javascript
-requestJSON(url, gotOptions).then(respone => {
+SteamUserInventory.requestJSON(url, gotOptions).then(respone => {
     console.log(response);
     // `got` response
 });
@@ -196,7 +196,7 @@ requestJSON(url, gotOptions).then(respone => {
 Get item special string `class_id` + `_` + `instance_id`
 ```javascript
 let steamItem = {classid: 98, instanceid: 115};
-getItemClassInstanceString(steamItem).then(str => {
+SteamUserInventory.getItemClassInstanceString(steamItem).then(str => {
     console.log(str);
     // 98_115
 });
@@ -212,7 +212,7 @@ Get item image (normal or large)
 ```javascript
 let steamItem = {icon_url_large: '__href__'};
 let large = true;
-getItemImageUrl(steamItem, large).then(str => {
+SteamUserInventory.getItemImageUrl(steamItem, large).then(str => {
     console.log(str);
     // https://steamcommunity-a.akamaihd.net/economy/image/__href__
 });
@@ -232,7 +232,7 @@ let steamItem = {
         {item: 'Inspect in Game...', link: 'test_link'}
     ]
 };
-getInspectItemLink(steamItem).then(str => {
+SteamUserInventory.getInspectItemLink(steamItem).then(str => {
     console.log(str);
     // test_link
 });
@@ -246,7 +246,7 @@ getInspectItemLink(steamItem).then(str => {
 #### formatItem
 Format item
 ```javascript
-formatItem(itemData).then(formatted => {
+SteamUserInventory.formatItem(itemData).then(formatted => {
     console.log(formatted);
     // {
     //     id: '14364197067',
@@ -282,7 +282,7 @@ formatItem(itemData).then(formatted => {
 #### formatData
 Format response data (result is array of objects formatted by [formatItem](#formatitem))
 ```javascript
-formatData(items, descriptions).then(formattedArray => {
+SteamUserInventory.formatData(items, descriptions).then(formattedArray => {
     console.log(formattedArray);
     // Array of objects formatted by `formatItem`
 });
@@ -296,7 +296,7 @@ formatData(items, descriptions).then(formattedArray => {
 #### formatDataFromOldEndPoint
 Format response data from old endpoint(see result [formatData](#formatdata))
 ```javascript
-formatDataFromOldEndPoint(data).then(formattedArray => {
+SteamUserInventory.formatDataFromOldEndPoint(data).then(formattedArray => {
     console.log(formattedArray);
     // Array of objects formatted by `formatItem`
 });
@@ -308,7 +308,7 @@ formatDataFromOldEndPoint(data).then(formattedArray => {
 #### formatDataFromNewEndPoint
 Format response data from new endpoint(see result [formatData](#formatdata))
 ```javascript
-formatDataFromNewEndPoint(data).then(formattedArray => {
+SteamUserInventory.formatDataFromNewEndPoint(data).then(formattedArray => {
     console.log(formattedArray);
     // Array of objects formatted by `formatItem`
 });
