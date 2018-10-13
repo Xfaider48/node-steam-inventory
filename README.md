@@ -1,4 +1,6 @@
 # node-steam-inventory
+[![npm version](https://img.shields.io/npm/v/@xfaider/node-steam-inventory.svg)](https://www.npmjs.com/package/@xfaider/node-steam-inventory)
+
 A module for interacting with steam for getting users inventory
 
 ## Two endpoints

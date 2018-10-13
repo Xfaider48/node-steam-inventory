@@ -41,3 +41,6 @@ jspm_packages
 
 # Lib
 /lib/
+
+# Test files
+test*

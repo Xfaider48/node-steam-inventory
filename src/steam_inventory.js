@@ -1,7 +1,7 @@
 import got from 'got';
-import async from 'async';
 import extend from 'extend';
 import clone from 'clone';
+
 
 /**
  * Bad response error
@@ -52,7 +52,7 @@ class SteamUserInventory {
      *
      * @returns {Promise}
      */
-    static requestJSON(url, gotOptions = {}) {
+    static async requestJSON(url, gotOptions = {}) {
         gotOptions = clone(gotOptions || {});
         gotOptions.json = true;
 
@@ -267,7 +267,7 @@ class SteamUserInventory {
      * @returns {Promise}
      * @private
      */
-    _request(url, gotOptions = {}) {
+    async _request(url, gotOptions = {}) {
         gotOptions = extend(true, {}, this.options.defaultGotOptions, gotOptions);
         return SteamUserInventory.requestJSON(url, gotOptions);
     }
@@ -282,18 +282,18 @@ class SteamUserInventory {
      * @throws {SteamUserInventoryError}
      * @private
      */
-    _requestValidateBody(url, gotOptions = {}) {
-        return this._request(url, gotOptions).then(response => {
-            if (!response.body || response.body !== Object(response.body)) {
-                throw new SteamUserInventoryError('Empty response', response);
-            }
+    async _requestValidateBody(url, gotOptions = {}) {
+        let response = await this._request(url, gotOptions);
 
-            if (!response.body.success) {
-                throw new SteamUserInventoryError('Unsuccessful response', response);
-            }
+        if (!response.body || response.body !== Object(response.body)) {
+            throw new SteamUserInventoryError('Empty response', response);
+        }
 
-            return response;
-        });
+        if (!response.body.success) {
+            throw new SteamUserInventoryError('Unsuccessful response', response);
+        }
+
+        return response;
     }
 
     /**
@@ -307,7 +307,7 @@ class SteamUserInventory {
      * @throws {TypeError|SteamUserInventoryError}
      * @returns {Promise}
      */
-    loadFromOldEndPoint({
+    async loadFromOldEndPoint({
         steamId = '',
         appId = 730,
         contextId = 2,
@@ -326,10 +326,9 @@ class SteamUserInventory {
      * @throws {TypeError|SteamUserInventoryError}
      * @returns {Promise}
      */
-    loadFromOldEndPointAndFormat(params) {
-        return this.loadFromOldEndPoint(params).then(response => {
-            return SteamUserInventory.formatDataFromOldEndPoint(response.body);
-        });
+    async loadFromOldEndPointAndFormat(params) {
+        let response = await this.loadFromOldEndPoint(params);
+        return SteamUserInventory.formatDataFromOldEndPoint(response.body);
     }
 
     /**
@@ -346,7 +345,7 @@ class SteamUserInventory {
      * @throws {TypeError|SteamUserInventoryError}
      * @returns {Promise}
      */
-    loadFromNewEndPoint({
+    async loadFromNewEndPoint({
         steamId = '',
         appId = 730,
         contextId = 2,
@@ -376,7 +375,7 @@ class SteamUserInventory {
      *
      * @returns {Promise}
      */
-    loadFromNewEndPointNextPage(params, previousResponse) {
+    async loadFromNewEndPointNextPage(params, previousResponse) {
         let previousResBody = previousResponse.body;
         let lastItem = previousResBody.assets[previousResBody.assets.length - 1];
         params.cursor = lastItem.assetid;
@@ -392,10 +391,9 @@ class SteamUserInventory {
      * @throws {TypeError|SteamUserInventoryError}
      * @returns {Promise}
      */
-    loadFromNewEndPointAndFormat(params) {
-        return this.loadFromNewEndPoint(params).then(response => {
-            return SteamUserInventory.formatDataFromNewEndPoint(response.body);
-        });
+    async loadFromNewEndPointAndFormat(params) {
+        let response = await this.loadFromNewEndPoint(params);
+        return SteamUserInventory.formatDataFromNewEndPoint(response.body);
     }
 
     /**
@@ -407,7 +405,7 @@ class SteamUserInventory {
      *
      * @returns {Promise}
      */
-    load(params, useNewEndPoint = true, getGotOptionsPromise = null) {
+    async load(params, useNewEndPoint = true, getGotOptionsPromise = null) {
         if (useNewEndPoint) {
             return this.loadAllDataFromNewEndPoint(params, getGotOptionsPromise);
         }
@@ -424,7 +422,7 @@ class SteamUserInventory {
      *
      * @returns {Promise}
      */
-    loadAndFormat(params, useNewEndPoint = true, getGotOptionsPromise = null) {
+    async loadAndFormat(params, useNewEndPoint = true, getGotOptionsPromise = null) {
         if (useNewEndPoint) {
             return this.loadAllDataFromNewEndPointAndFormat(params, getGotOptionsPromise);
         }
@@ -445,7 +443,7 @@ class SteamUserInventory {
      *
      * @returns {Promise}
      */
-    loadAllDataFromNewEndPoint({
+    async loadAllDataFromNewEndPoint({
         steamId = '',
         appId = 730,
         contextId = 2,
@@ -459,49 +457,39 @@ class SteamUserInventory {
         }
 
         if (typeof getGotOptionsPromise !== 'function') {
-            getGotOptionsPromise = () => {
-                return Promise.resolve(gotOptions);
-            }
+            getGotOptionsPromise = async () => {
+                return gotOptions;
+            };
         }
 
         let params = {steamId, appId, contextId, language, gotOptions};
         params.count = perPage;
 
         let responses = [];
+        let response = await this.loadFromNewEndPoint(params);
 
-        return this.loadFromNewEndPoint(params).then(response => {
-            responses.push(response);
+        responses.push(response);
 
-            let body = response.body;
-            let totalCount = body.total_inventory_count;
-            if (totalCount <= params.count) {
-                return responses;
+        let body = response.body;
+        let totalCount = body.total_inventory_count;
+        if (totalCount <= params.count) {
+            return responses;
+        }
+        else {
+            let arr = [];
+            let pages = Math.ceil(totalCount / params.count) - 1;
+            while (pages > 0) {
+                arr.push(--pages);
             }
-            else {
-                let arr = [];
-                let pages = Math.ceil(totalCount / params.count) - 1;
-                while (pages > 0) {
-                    arr.push(--pages);
-                }
 
-                return new Promise((resolve, reject) => {
-                    async.eachSeries(
-                        arr,
-                        (key, cb) => {
-                            getGotOptionsPromise().then(newGotOptions => {
-                                params.gotOptions = newGotOptions;
-
-                                this.loadFromNewEndPointNextPage(params, responses[responses.length - 1]).then(resp => {
-                                    responses.push(resp);
-                                    cb();
-                                }).catch(cb);
-                            }).catch(cb);
-                        },
-                        error => error ? reject(error) : resolve(responses)
-                    );
-                });
+            for (const key of arr) {
+                params.gotOptions = await getGotOptionsPromise();
+                let iterateResponse = await this.loadFromNewEndPointNextPage(params, responses[responses.length - 1]);
+                responses.push(iterateResponse);
             }
-        });
+
+            return responses;
+        }
     }
 
     /**
@@ -512,16 +500,15 @@ class SteamUserInventory {
      *
      * @returns {Promise}
      */
-    loadAllDataFromNewEndPointAndFormat(params, getGotOptionsPromise = null) {
-        return this.loadAllDataFromNewEndPoint(params, getGotOptionsPromise).then(responses => {
-            let resultData = [];
+    async loadAllDataFromNewEndPointAndFormat(params, getGotOptionsPromise = null) {
+        let responses = await this.loadAllDataFromNewEndPoint(params, getGotOptionsPromise);
+        let resultData = [];
 
-            responses.forEach(response => {
-                resultData = resultData.concat(SteamUserInventory.formatDataFromNewEndPoint(response.body));
-            });
-
-            return resultData;
+        responses.forEach(response => {
+            resultData = resultData.concat(SteamUserInventory.formatDataFromNewEndPoint(response.body));
         });
+
+        return resultData;
     }
 }
 
